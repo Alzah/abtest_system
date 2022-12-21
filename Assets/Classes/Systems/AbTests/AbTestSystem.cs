@@ -11,8 +11,8 @@ using Classes.Systems.User;
 namespace Classes.Systems.AbTests
 {
     /// <summary>
-    /// Система аб-тестов
-    /// Пример конфига: Assets/StreamingAssets/abtest_config.json
+    /// РЎРёСЃС‚РµРјР° Р°Р±-С‚РµСЃС‚РѕРІ  
+    /// РџСЂРёРјРµСЂ РєРѕРЅС„РёРіР°: Assets/StreamingAssets/abtest_config.json 
     /// </summary>
     public class AbTestSystem : MonoBehaviour
     {
@@ -38,17 +38,17 @@ namespace Classes.Systems.AbTests
             _userProperties = FindObjectOfType<UserProperties>();
             _networkTimeManager = FindObjectOfType<NetworkTimeManager>();
 
-            //вытаскиваем из сейвов абтесты
+            //РІС‹С‚Р°СЃРєРёРІР°РµРј РёР· СЃРµР№РІРѕРІ Р°Р±С‚РµСЃС‚С‹
             Debug.Log($"[AbTestSystem] Load ab tests from device");
             var savedAbTest = _saveSystem.GetValue("ab_test", new List<AbTest>());
             _closedAbTest = _saveSystem.GetValue("ab_test_closed", new HashSet<string>());
 
             _runningAbTests.AddRange(savedAbTest);
             
-            //закрываем абтесты подходящие под условия закрытия
+            //Р·Р°РєСЂС‹РІР°РµРј Р°Р±С‚РµСЃС‚С‹ РїРѕРґС…РѕРґСЏС‰РёРµ РїРѕРґ СѓСЃР»РѕРІРёСЏ Р·Р°РєСЂС‹С‚РёСЏ
             TryEndRunningAbTests();
 
-            //стартуем загрузку конфига с cdn
+            //СЃС‚Р°СЂС‚СѓРµРј Р·Р°РіСЂСѓР·РєСѓ РєРѕРЅС„РёРіР° СЃ cdn
             LoadConfig();
 
             SubscribeEvent();
@@ -60,7 +60,7 @@ namespace Classes.Systems.AbTests
             var json = await AsyncWebRequest.Download(_abTestConfigUrl);
             var abtests = ParseJson(json);
 
-            //апдейтим текущие запущенные
+            //Р°РїРґРµР№С‚РёРј С‚РµРєСѓС‰РёРµ Р·Р°РїСѓС‰РµРЅРЅС‹Рµ
             for (int i = 0; i < abtests.Count;)
             {
                 var abtest = abtests[i];
@@ -74,13 +74,13 @@ namespace Classes.Systems.AbTests
                 }
             }
 
-            //запускаем новые или откладываем не запущенные для дальшейшей обработки
+            //Р·Р°РїСѓСЃРєР°РµРј РЅРѕРІС‹Рµ РёР»Рё РѕС‚РєР»Р°РґС‹РІР°РµРј РЅРµ Р·Р°РїСѓС‰РµРЅРЅС‹Рµ РґР»СЏ РґР°Р»СЊС€РµР№С€РµР№ РѕР±СЂР°Р±РѕС‚РєРё
             for (int i = 0; i < abtests.Count; i++)
             {
                 var abtest = abtests[i];
                 if(_closedAbTest.Contains(abtest.Id))
                 {
-                    //пропускаем инициализацию если аб-тест уже закрыт
+                    //РїСЂРѕРїСѓСЃРєР°РµРј РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ РµСЃР»Рё Р°Р±-С‚РµСЃС‚ СѓР¶Рµ Р·Р°РєСЂС‹С‚
                     continue;
                 }
                 if (abtest.NeedStart(_userProperties.Get()))
@@ -95,7 +95,7 @@ namespace Classes.Systems.AbTests
             }
             abtests.Clear();
 
-            //сортируем вперёд более приоритетные абтесты
+            //СЃРѕСЂС‚РёСЂСѓРµРј РІРїРµСЂС‘Рґ Р±РѕР»РµРµ РїСЂРёРѕСЂРёС‚РµС‚РЅС‹Рµ Р°Р±С‚РµСЃС‚С‹
             SortRunningEvent();
 
             AbTestUpdate?.Invoke(_runningAbTests);
@@ -157,13 +157,13 @@ namespace Classes.Systems.AbTests
         }
 
         /// <summary>
-        /// Получение параметра по имени.
-        /// В случае повтора параметров в аб-тестах, параметр возвращается из аб-теста с более высоким приоритетом
+        /// РџРѕР»СѓС‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° РїРѕ РёРјРµРЅРё.
+        /// Р’ СЃР»СѓС‡Р°Рµ РїРѕРІС‚РѕСЂР° РїР°СЂР°РјРµС‚СЂРѕРІ РІ Р°Р±-С‚РµСЃС‚Р°С…, РїР°СЂР°РјРµС‚СЂ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РёР· Р°Р±-С‚РµСЃС‚Р° СЃ Р±РѕР»РµРµ РІС‹СЃРѕРєРёРј РїСЂРёРѕСЂРёС‚РµС‚РѕРј
         /// </summary>
-        /// <typeparam name="T">Тип параметра аб-теста</typeparam>
-        /// <param name="name">Имя параметра</param>
-        /// <param name="defaultValue">Значение по умолчанию, в случае если параметр не найден или неверно указан тип</param>
-        /// <returns>Найденный параметр или значение по умолчанию(defaultValue)</returns>
+        /// <typeparam name="T">РўРёРї РїР°СЂР°РјРµС‚СЂР° Р°Р±-С‚РµСЃС‚Р°</typeparam>
+        /// <param name="name">РРјСЏ РїР°СЂР°РјРµС‚СЂР°</param>
+        /// <param name="defaultValue">Р—РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ, РІ СЃР»СѓС‡Р°Рµ РµСЃР»Рё РїР°СЂР°РјРµС‚СЂ РЅРµ РЅР°Р№РґРµРЅ РёР»Рё РЅРµРІРµСЂРЅРѕ СѓРєР°Р·Р°РЅ С‚РёРї</param>
+        /// <returns>РќР°Р№РґРµРЅРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ РёР»Рё Р·РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ(defaultValue)</returns>
         public T GetValueForParameterName<T>(string name, T defaultValue)
         {
             var abtest = _runningAbTests.FirstOrDefault(x => x.HasParameter(name));
@@ -186,10 +186,10 @@ namespace Classes.Systems.AbTests
         }
 
         /// <summary>
-        /// Получание выбранной когорты для аб-теста
+        /// РџРѕР»СѓС‡Р°РЅРёРµ РІС‹Р±СЂР°РЅРЅРѕР№ РєРѕРіРѕСЂС‚С‹ РґР»СЏ Р°Р±-С‚РµСЃС‚Р°
         /// </summary>
-        /// <param name="id">Идентификатор аб-теста</param>
-        /// <returns>Когорта аб-теста или null</returns>
+        /// <param name="id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ Р°Р±-С‚РµСЃС‚Р°</param>
+        /// <returns>РљРѕРіРѕСЂС‚Р° Р°Р±-С‚РµСЃС‚Р° РёР»Рё null</returns>
         public Option GetOptionForAbTest(string id)
         {
             var abtest = _runningAbTests.FirstOrDefault(x => x.GetId().Equals(id));
@@ -201,21 +201,21 @@ namespace Classes.Systems.AbTests
         }
 
         /// <summary>
-        /// Данные о запущенных у пользователя аб-тестах
+        /// Р”Р°РЅРЅС‹Рµ Рѕ Р·Р°РїСѓС‰РµРЅРЅС‹С… Сѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ Р°Р±-С‚РµСЃС‚Р°С…
         /// </summary>
-        /// <returns>Таблица(id аб-теста; id выбранной когорты)</returns>
+        /// <returns>РўР°Р±Р»РёС†Р°(id Р°Р±-С‚РµСЃС‚Р°; id РІС‹Р±СЂР°РЅРЅРѕР№ РєРѕРіРѕСЂС‚С‹)</returns>
         public Dictionary<string, string> GetAnalyticsData()
         {
             return new Dictionary<string, string>(_runningAbTests.Select(x => new KeyValuePair<string, string>(x.GetId(), x.GetOption().Id)));
         }
 
         /// <summary>
-        /// Закрытие тестов
-        /// public - для тестов, запуск/закрытие тестов нужно делать геймплейном цикле при изменении ключевых параметров или при смене игровоко стейта, например выхода в меню
+        /// Р—Р°РєСЂС‹С‚РёРµ С‚РµСЃС‚РѕРІ
+        /// public - РґР»СЏ С‚РµСЃС‚РѕРІ, Р·Р°РїСѓСЃРє/Р·Р°РєСЂС‹С‚РёРµ С‚РµСЃС‚РѕРІ РЅСѓР¶РЅРѕ РґРµР»Р°С‚СЊ РіРµР№РјРїР»РµР№РЅРѕРј С†РёРєР»Рµ РїСЂРё РёР·РјРµРЅРµРЅРёРё РєР»СЋС‡РµРІС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ РёР»Рё РїСЂРё СЃРјРµРЅРµ РёРіСЂРѕРІРѕРєРѕ СЃС‚РµР№С‚Р°, РЅР°РїСЂРёРјРµСЂ РІС‹С…РѕРґР° РІ РјРµРЅСЋ
         /// </summary>
         public void TryEndRunningAbTests()
         {
-            //закрываем абтесты подходящие под условия закрытия
+            //Р·Р°РєСЂС‹РІР°РµРј Р°Р±С‚РµСЃС‚С‹ РїРѕРґС…РѕРґСЏС‰РёРµ РїРѕРґ СѓСЃР»РѕРІРёСЏ Р·Р°РєСЂС‹С‚РёСЏ
             var closedCount = 0;
             var closingTests = _runningAbTests.Where(x => x.NeedEnd(_userProperties.Get())).ToArray();
             foreach (var test in closingTests)
@@ -231,8 +231,8 @@ namespace Classes.Systems.AbTests
         }
 
         /// <summary>
-        /// Запуск отложенных тестов
-        /// public - для тестов, запуск/закрытие тестов нужно делать геймплейном цикле при изменении ключевых параметров или при смене игровоко стейта, например выхода в меню
+        /// Р—Р°РїСѓСЃРє РѕС‚Р»РѕР¶РµРЅРЅС‹С… С‚РµСЃС‚РѕРІ
+        /// public - РґР»СЏ С‚РµСЃС‚РѕРІ, Р·Р°РїСѓСЃРє/Р·Р°РєСЂС‹С‚РёРµ С‚РµСЃС‚РѕРІ РЅСѓР¶РЅРѕ РґРµР»Р°С‚СЊ РіРµР№РјРїР»РµР№РЅРѕРј С†РёРєР»Рµ РїСЂРё РёР·РјРµРЅРµРЅРёРё РєР»СЋС‡РµРІС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ РёР»Рё РїСЂРё СЃРјРµРЅРµ РёРіСЂРѕРІРѕРєРѕ СЃС‚РµР№С‚Р°, РЅР°РїСЂРёРјРµСЂ РІС‹С…РѕРґР° РІ РјРµРЅСЋ
         /// </summary>
         public void TryStartWaitingAbTests()
         {
