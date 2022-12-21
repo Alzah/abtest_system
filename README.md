@@ -33,30 +33,30 @@
 Условия:
 ```
 {
-	"TypeCondition": "Value", //Тип - значение
-	"Key": "current_level", //Ключ параметра
-	"Value": 10, //Значение параметра
-	"Condition": "MoreOrEqual" // Знак условия
+  "TypeCondition": "Value", //Тип - значение
+  "Key": "current_level", //Ключ параметра
+  "Value": 10, //Значение параметра
+  "Condition": "MoreOrEqual" // Знак условия
 },
 {
-	"TypeCondition": "Time", //Тип - время
-	"Time": "2022-12-30T00:00:00Z", //Значение - формат ГГГГ-ММ-ДДTЧЧ:ММ:ССZ
-	"IsGlobal": true, //Флаг - требуется ли верификация времени по серверу или можно опираться на локальное время
-	"Condition": "LessOrEqual" // Знак условия
+  "TypeCondition": "Time", //Тип - время
+  "Time": "2022-12-30T00:00:00Z", //Значение - формат ГГГГ-ММ-ДДTЧЧ:ММ:ССZ
+  "IsGlobal": true, //Флаг - требуется ли верификация времени по серверу или можно опираться на локальное время
+  "Condition": "LessOrEqual" // Знак условия
 }
 ```
 
 
 Возможные значения Condition:
 ```
->Less - <,
->LessOrEqual - <=,
->Equal - ==,
->NonEqual - !=,
->MoreOrEqual - >=,
->More - >,
->Any - Всегда,
->Never - Никогда
+Less - <,
+LessOrEqual - <=,
+Equal - ==,
+NonEqual - !=,
+MoreOrEqual - >=,
+More - >,
+Any - Всегда,
+Never - Никогда
 ```
 
 Когорта пользователю при старте аб-теста присваивается на основе deviceUniqueIdentifier и последовательности простых чисел [3,...,53]. 
