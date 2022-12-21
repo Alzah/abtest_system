@@ -1,0 +1,78 @@
+{
+    "ab_tests": [
+      {
+        "Id": "ab_test_after_10_lvl",
+        "Version": 2,
+        "OptionsCount": 3,
+        "Options": [
+          {
+            "Id": "time_30",
+            "Parameters": [{"Name":"time","Value": 30}, {"Name":"localkit_id","Value": "localkit_id.time_30"}],
+            "Weight": 20
+          },
+          {
+            "Id": "time_15",
+            "Parameters": [{"Name":"time","Value": 15}, {"Name":"localkit_id","Value": "localkit_id.time_15"}],
+            "Weight": 40
+          },
+          {
+            "Id": "time_5",
+            "Parameters": [{"Name":"time","Value": 5}, {"Name":"localkit_id","Value": "localkit_id.time_5"}],
+            "Weight": 100
+          }
+        ],
+        "Priority": 1,
+        "DistributionId": 5,
+        "StartConditions": [
+			{
+				"TypeCondition": "Value",
+				"Key": "current_level",
+				"Value": 10,
+				"Condition": "MoreOrEqual"
+			},
+			{
+				"TypeCondition": "Time",
+				"Time": "2022-12-30T00:00:00Z",
+				"IsGlobal": true,
+				"Condition": "LessOrEqual"
+			}
+		],
+        "EndConditions": [
+          {
+				"TypeCondition": "Value",
+				"Key": "current_level",
+				"Value": 100,
+				"Condition": "MoreOrEqual"
+		  }
+        ]
+      },
+	  {
+        "Id": "ab_test_for_all",
+        "Version": 3,
+        "OptionsCount": 2,
+        "Options": [
+          {
+            "Id": "more_money",
+            "Parameters": [{"Name":"freeMoney","Value": 1000}],
+            "Weight": 50
+          },
+          {
+            "Id": "less_money",
+            "Parameters": [{"Name":"freeMoney","Value": 500}],
+            "Weight": 50
+          },
+        ],
+        "Priority": 2,
+        "DistributionId": 3,
+        "StartConditions": [],
+        "EndConditions": [
+          {
+			"TypeCondition": "Value",
+			"Key": "current_level",
+			"Value": 50,
+			"Condition": "MoreOrEqual"
+		  }
+        ]
+      }
+    ]
+}
